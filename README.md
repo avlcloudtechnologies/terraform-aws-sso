@@ -1,5 +1,5 @@
 # AWS SSO Terraform module
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/avlcloudtechnologies/terrafom-aws-sso)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/avlcloudtechnologies/terraform-aws-sso)
 
 This module handles creation of AWS SSO permission sets and assignment to AWS SSO entities and AWS Accounts.
 
