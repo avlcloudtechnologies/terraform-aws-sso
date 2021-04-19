@@ -28,7 +28,7 @@ Before this example can be used, please ensure that the following pre-requisites
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_sso"></a> [sso](#module\_sso) | git@github.com:avl-cloud-technologies/mano-terraform-aws-sso.git |  |
+| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws |  |
 
 ## Resources
 
