@@ -12,7 +12,7 @@ locals {
 }
 
 module "sso" {
-  source = "git@github.com:avl-cloud-technologies/mano-terraform-aws-sso.git"
+  source = "avlcloudtechnologies/sso/aws"
 
   permission_sets = {
     AdministratorAccess = {
