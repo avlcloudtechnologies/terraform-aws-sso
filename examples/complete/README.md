@@ -28,7 +28,7 @@ Before this example can be used, please ensure that the following pre-requisites
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws |  |
+| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws | n/a |
 
 ## Resources
 
@@ -49,5 +49,6 @@ Before this example can be used, please ensure that the following pre-requisites
 
 | Name | Description |
 |------|-------------|
-| <a name="output_aws_ssoadmin_permission_sets"></a> [aws\_ssoadmin\_permission\_sets](#output\_aws\_ssoadmin\_permission\_sets) | Maps of account assignments to permission sets with keys user/group\_name.permission\_set\_name.account\_id and attributes listed in Terraform resource aws\_ssoadmin\_account\_assignment documentation. |
+| <a name="output_aws_ssoadmin_account_assignments"></a> [aws\_ssoadmin\_account\_assignments](#output\_aws\_ssoadmin\_account\_assignments) | Maps of account assignments to permission sets with keys user/group\_name.permission\_set\_name.account\_id and attributes listed in Terraform resource aws\_ssoadmin\_account\_assignment documentation. |
+| <a name="output_aws_ssoadmin_permission_sets"></a> [aws\_ssoadmin\_permission\_sets](#output\_aws\_ssoadmin\_permission\_sets) | Maps of permission sets with attributes listed in Terraform resource aws\_ssoadmin\_permission\_set documentation. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
