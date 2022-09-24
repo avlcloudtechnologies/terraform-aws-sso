@@ -5,10 +5,8 @@ provider "aws" {
 data "aws_organizations_organization" "this" {}
 
 locals {
-  all_accounts_names            = [for account in toset(data.aws_organizations_organization.this.accounts) : account.name]
-  all_accounts_map              = zipmap(local.all_accounts_names, tolist(toset(data.aws_organizations_organization.this.accounts)))
-  non_management_accounts_names = [for account in toset(data.aws_organizations_organization.this.non_master_accounts) : account.name]
-  non_management_accounts_map   = zipmap(local.non_management_accounts_names, tolist(toset(data.aws_organizations_organization.this.non_master_accounts)))
+  all_active_accounts_map            = { for account in toset(data.aws_organizations_organization.this.accounts) : account.name => account if account.status == "ACTIVE" }
+  non_management_active_accounts_map = { for account in toset(data.aws_organizations_organization.this.non_master_accounts) : account.name => account if account.status == "ACTIVE" }
 }
 
 module "sso" {
@@ -30,10 +28,12 @@ module "sso" {
     },
     EKSAdminAccess = {
       description = "Allow full EKS and read only access across all AWS resources.",
-      # Can use Managed Policies and Inline policies in the same permission set
+      # Can use Managed, Customer and Inline policies in the same permission set
       managed_policies = ["arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"]
       inline_policy    = data.aws_iam_policy_document.EKSAdmin.json
-      tags             = { "foo" = "bar" },
+      # NOTE! Customer Managed policies have to exist in all AWS accounts that this permission set will be assigned to.
+      customer_managed_policies = ["customer-managed-policy-foo"]
+      tags                      = { "foo" = "bar" },
     }
   }
   account_assignments = [
@@ -41,31 +41,31 @@ module "sso" {
       principal_name = "management"
       principal_type = "GROUP"
       permission_set = "AdministratorAccess"
-      account_ids    = [for account in local.all_accounts_map : account.id]
+      account_ids    = [for account in local.all_active_accounts_map : account.id]
     },
     {
       principal_name = "admins"
       principal_type = "GROUP"
       permission_set = "AdministratorAccess"
-      account_ids    = [for account in local.non_management_accounts_map : account.id]
+      account_ids    = [for account in local.non_management_active_accounts_map : account.id]
     },
     {
       principal_name = "bob"
       principal_type = "USER"
       permission_set = "PowerUserAccess"
-      account_ids    = [for account in local.non_management_accounts_map : account.id if contains(var.security_accounts, account.name)]
+      account_ids    = [for account in local.non_management_active_accounts_map : account.id if contains(var.security_accounts, account.name)]
     },
     {
       principal_name = "developers"
       principal_type = "GROUP"
       permission_set = "ViewOnlyAccess"
-      account_ids    = [for account in local.non_management_accounts_map : account.id if contains(var.developer_readonly_accounts, account.name)]
+      account_ids    = [for account in local.non_management_active_accounts_map : account.id if contains(var.developer_readonly_accounts, account.name)]
     },
     {
       principal_name = "developers"
       principal_type = "GROUP"
       permission_set = "EKSAdminAccess"
-      account_ids    = [for account in local.non_management_accounts_map : account.id if contains(var.developer_workload_accounts, account.name)]
+      account_ids    = [for account in local.non_management_active_accounts_map : account.id if contains(var.developer_workload_accounts, account.name)]
     },
   ]
 }
