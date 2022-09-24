@@ -1,6 +1,7 @@
 locals {
   ssoadmin_instance_arn = tolist(data.aws_ssoadmin_instances.this.arns)[0]
   managed_ps            = { for ps_name, ps_attrs in var.permission_sets : ps_name => ps_attrs if can(ps_attrs.managed_policies) }
+  customer_managed_ps   = { for ps_name, ps_attrs in var.permission_sets : ps_name => ps_attrs if can(ps_attrs.customer_managed_policies) }
   # create ps_name and managed policy maps list
   ps_policy_maps = flatten([
     for ps_name, ps_attrs in local.managed_ps : [
@@ -8,6 +9,15 @@ locals {
         ps_name    = ps_name
         policy_arn = policy
       } if can(ps_attrs.managed_policies)
+    ]
+  ])
+  # create ps_name and customer managed policy maps list
+  customer_ps_policy_maps = flatten([
+    for ps_name, ps_attrs in local.customer_managed_ps : [
+      for policy in ps_attrs.customer_managed_policies : {
+        ps_name     = ps_name
+        policy_name = policy
+      } if can(ps_attrs.customer_managed_policies)
     ]
   ])
   account_assignments = flatten([
@@ -25,6 +35,7 @@ locals {
 }
 
 data "aws_ssoadmin_instances" "this" {}
+
 data "aws_identitystore_group" "this" {
   for_each          = toset(local.groups)
   identity_store_id = tolist(data.aws_ssoadmin_instances.this.identity_store_ids)[0]
@@ -42,11 +53,11 @@ data "aws_identitystore_user" "this" {
     attribute_value = each.value
   }
 }
+
 resource "aws_ssoadmin_permission_set" "this" {
   for_each = var.permission_sets
 
-  name = each.key
-  # description      = each.value.description
+  name             = each.key
   description      = lookup(each.value, "description", null)
   instance_arn     = local.ssoadmin_instance_arn
   relay_state      = lookup(each.value, "relay_state", null)
@@ -69,6 +80,18 @@ resource "aws_ssoadmin_managed_policy_attachment" "this" {
   managed_policy_arn = each.value.policy_arn
   permission_set_arn = aws_ssoadmin_permission_set.this[each.value.ps_name].arn
 }
+
+resource "aws_ssoadmin_customer_managed_policy_attachment" "this" {
+  for_each = { for ps in local.customer_ps_policy_maps : "${ps.ps_name}.${ps.policy_name}" => ps }
+
+  instance_arn       = local.ssoadmin_instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.this[each.value.ps_name].arn
+  customer_managed_policy_reference {
+    name = each.value.policy_name
+    path = "/"
+  }
+}
+
 resource "aws_ssoadmin_account_assignment" "this" {
   for_each = { for assignment in local.account_assignments : "${assignment.principal_name}.${assignment.permission_set.name}.${assignment.account_id}" => assignment }
 

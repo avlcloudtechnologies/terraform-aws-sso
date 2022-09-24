@@ -6,6 +6,7 @@ Before this example can be used, please ensure that the following pre-requisites
 - Enable AWS SSO. [Documentation](https://docs.aws.amazon.com/singlesignon/latest/userguide/step1.html).
 - Create AWS SSO entities (Users and Groups). [Documentation](https://docs.aws.amazon.com/singlesignon/latest/userguide/addusers.html).
 - Ensure that Terraform is using a role with permissions required for AWS SSO management. [Documentation](https://docs.aws.amazon.com/singlesignon/latest/userguide/iam-auth-access-using-id-policies.html#requiredpermissionsconsole).
+- If using Customer Managed Policies in permission sets, please make sure that policy exists (pre-created) in target AWS account.
 
 ## Diagram
 ![Alt text](aws_sso_diagram.png?raw=true "Title")
@@ -16,19 +17,19 @@ Before this example can be used, please ensure that the following pre-requisites
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12.23 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.27 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.30 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.27 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.30 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws | n/a |
+| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws |  |
 
 ## Resources
 
