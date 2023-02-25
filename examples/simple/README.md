@@ -26,7 +26,7 @@ Before this example can be used, please ensure that the following pre-requisites
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws |  |
+| <a name="module_sso"></a> [sso](#module\_sso) | avlcloudtechnologies/sso/aws | n/a |
 
 ## Resources
 
