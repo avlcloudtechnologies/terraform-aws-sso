@@ -47,6 +47,7 @@ module "sso" {
 | session\_duration | (Optional) The length of time that the application user sessions are valid in the ISO-8601 standard | string | Provider default behavior. |
 | tags | (Optional) Key-value map of resource tags. | string | Provider default behavior |
 | managed\_policies | (Optional) List of Managed IAM policies that are attached to permission set. | list(string) | Managed Policies not set. |
+| customer\_managed\_policies | (Optional) List of Customer Managed IAM policies that are attached to permission set. | list(string) | Customer Managed Policies not set. |
 | inline\_policy | (Optional) Inline policy that is attached to permission set. | string | Inline policy not set. |
 
 `account_assignments` is a list of maps which have the following keys/value pairs.
