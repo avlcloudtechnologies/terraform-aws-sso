@@ -73,6 +73,7 @@ module "sso" {
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.40 |
+| <a name="provider_null"></a> [null](#provider\_null) | n/a |
 
 ## Modules
 
@@ -87,6 +88,8 @@ No modules.
 | [aws_ssoadmin_managed_policy_attachment.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssoadmin_managed_policy_attachment) | resource |
 | [aws_ssoadmin_permission_set.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssoadmin_permission_set) | resource |
 | [aws_ssoadmin_permission_set_inline_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssoadmin_permission_set_inline_policy) | resource |
+| [null_resource.group_dependency](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.user_dependency](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [aws_identitystore_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/identitystore_group) | data source |
 | [aws_identitystore_user.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/identitystore_user) | data source |
 | [aws_ssoadmin_instances.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssoadmin_instances) | data source |
@@ -96,6 +99,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_assignments"></a> [account\_assignments](#input\_account\_assignments) | List of maps containing mapping between user/group, permission set and assigned accounts list. See account\_assignments description in README for more information about map values. | <pre>list(object({<br>    principal_name = string,<br>    principal_type = string,<br>    permission_set = string,<br>    account_ids    = list(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_identitystore_group_data_source_depends_on"></a> [identitystore\_group\_data\_source\_depends\_on](#input\_identitystore\_group\_data\_source\_depends\_on) | List of parameters that identitystore group data sources depend on, for example new SSO group IDs. | `list(string)` | `[]` | no |
+| <a name="input_identitystore_user_data_source_depends_on"></a> [identitystore\_user\_data\_source\_depends\_on](#input\_identitystore\_user\_data\_source\_depends\_on) | List of parameters that identitystore user data sources depend on, for example new SSO user IDs. | `list(string)` | `[]` | no |
 | <a name="input_permission_sets"></a> [permission\_sets](#input\_permission\_sets) | Map of maps containing Permission Set names as keys. See permission\_sets description in README for information about map values. | `any` | <pre>{<br>  "AdministratorAccess": {<br>    "description": "Provides full access to AWS services and resources.",<br>    "managed_policies": [<br>      "arn:aws:iam::aws:policy/AdministratorAccess"<br>    ],<br>    "session_duration": "PT2H"<br>  }<br>}</pre> | no |
 
 ## Outputs
