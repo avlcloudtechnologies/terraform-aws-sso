@@ -62,6 +62,12 @@ module "sso" {
       permission_set = "AdministratorAccess"
       account_ids    = [for account in local.non_management_active_accounts_map : account.id]
     },
+    {
+      principal_name = "readonly"
+      principal_type = "GROUP"
+      permission_set = "ViewOnlyAccess"
+      account_ids    = [for account in local.non_management_active_accounts_map : account.id]
+    },
   ]
   identitystore_group_data_source_depends_on = [for group in module.aws_identitystore.groups : group.group_id]
 }

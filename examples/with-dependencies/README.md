@@ -1,5 +1,5 @@
 # Simple
-Example showing how to create SSO users and groups without module depends_on argument which would re-create all module resources if new AWS account is added. 
+Example showing how to create SSO users and groups in the same state file as `terraform-aws-sso` module resources and without adding `depends_on` argument at the module level. Using null resource, it will only recreate account assignments, when new SSO group is added. It will NOT re-create all module resources, after a new AWS Account is added. 
 
 ## Pre-requisites
 Before this example can be used, please ensure that the following pre-requisites are met:
