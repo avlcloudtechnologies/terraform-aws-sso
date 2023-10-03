@@ -21,3 +21,15 @@ variable "account_assignments" {
 
   default = []
 }
+
+variable "identitystore_group_data_source_depends_on" {
+  description = "List of parameters that identitystore group data sources depend on, for example new SSO group IDs."
+  type        = list(string)
+  default     = []
+}
+
+variable "identitystore_user_data_source_depends_on" {
+  description = "List of parameters that identitystore user data sources depend on, for example new SSO user IDs."
+  type        = list(string)
+  default     = []
+}

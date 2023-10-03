@@ -34,6 +34,18 @@ locals {
   users  = [for assignment in var.account_assignments : assignment.principal_name if assignment.principal_type == "USER"]
 }
 
+resource "null_resource" "group_dependency" {
+  triggers = {
+    dependency_id = join(",", var.identitystore_group_data_source_depends_on)
+  }
+}
+
+resource "null_resource" "user_dependency" {
+  triggers = {
+    dependency_id = join(",", var.identitystore_user_data_source_depends_on)
+  }
+}
+
 data "aws_ssoadmin_instances" "this" {}
 
 data "aws_identitystore_group" "this" {
@@ -45,6 +57,7 @@ data "aws_identitystore_group" "this" {
       attribute_value = each.value
     }
   }
+  depends_on = [null_resource.group_dependency]
 }
 
 data "aws_identitystore_user" "this" {
@@ -56,6 +69,7 @@ data "aws_identitystore_user" "this" {
       attribute_value = each.value
     }
   }
+  depends_on = [null_resource.user_dependency]
 }
 
 resource "aws_ssoadmin_permission_set" "this" {
